@@ -18,7 +18,6 @@ eeg_directory = r"E:\Code snippets\IntraOp Data"
 eeg_data_dict_injured = {}
 eeg_data_dict_healthy = {}
 
-
 # Iterate through all files in the directory and its subdirectories
 for foldername, subfolders, filenames in os.walk(eeg_directory):
     for filename in filenames:
@@ -28,7 +27,6 @@ for foldername, subfolders, filenames in os.walk(eeg_directory):
             path_parts = foldername.split(os.sep)
             patient_id = None
             situation_id = None
-            
             
             vhdr_file = os.path.join(foldername, filename)
             filename_channel_quality = vhdr_file.replace('acute_ieeg.vhdr', 'acute_channels.tsv')
@@ -44,7 +42,7 @@ for foldername, subfolders, filenames in os.walk(eeg_directory):
                 # Create the dictionary key
                 key = f'{patient_id}_{situation_id}'
                 
-                # Assuming you want to store the file path, you can modify this part accordingly
+                
                 file_path = os.path.join(foldername, filename)
                 
                 # Add the EEG information to the dictionary
@@ -86,10 +84,6 @@ for foldername, subfolders, filenames in os.walk(eeg_directory):
 combined_dict = {'healthy': list(eeg_data_dict_healthy.values()), 'injured': list(eeg_data_dict_injured.values())}
 
 
-
-
-# Assuming you have the combined_dict as described in the previous example
-
 # Example function to extract channels from raw data
 def extract_channels(raw_object):
     channels = []
@@ -124,6 +118,33 @@ for condition, raw_objects in combined_dict.items():
 # Print the resulting simplified dictionary
 print(simplified_dict)
 
+
+import json
+
+
+print("started converting")
+# Function to convert NumPy arrays to lists
+def convert_numpy_to_list(obj):
+    if isinstance(obj, np.ndarray):
+        return obj.tolist()
+    elif isinstance(obj, list):
+        return [convert_numpy_to_list(item) for item in obj]
+    elif isinstance(obj, dict):
+        return {key: convert_numpy_to_list(value) for key, value in obj.items()}
+    else:
+        return obj
+
+# Convert NumPy arrays to lists in the simplified_dict
+converted_dict = convert_numpy_to_list(simplified_dict)
+
+# Specify the file path where you want to save the JSON file
+json_file_path = 'structured_eeg.json'
+print("finished converting")
+# Save the converted_dict to a JSON file
+with open(json_file_path, 'w') as json_file:
+    json.dump(converted_dict, json_file)
+
+print(f"The simplified_dict has been saved to {json_file_path}")
 
 
 
