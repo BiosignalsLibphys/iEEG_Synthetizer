@@ -85,15 +85,7 @@ for foldername, subfolders, filenames in os.walk(eeg_directory):
 # Create a new dictionary to store the combined data
 combined_dict = {'healthy': list(eeg_data_dict_healthy.values()), 'injured': list(eeg_data_dict_injured.values())}
 
-#["healthy",total_healthy_subjects, healthy_channels_per_subject]
 
-# Example function to extract channels from raw data
-def extract_channels(raw_object):
-    channels = []
-    for channel_idx in range(raw_object.info['nchan']):
-        channel_data = raw_object.get_data(picks=channel_idx)
-        channels.append(channel_data)
-    return channels
 
 
 # Assuming you have the combined_dict as described in the previous example
