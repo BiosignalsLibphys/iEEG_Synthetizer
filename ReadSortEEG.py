@@ -8,10 +8,11 @@ Created on Fri Jan 19 15:24:19 2024
 import mne
 import os
 import pandas as pd
+import numpy as np
 
 
 # Directory containing your EEG files
-eeg_directory = r"E:\IntraOp Data"
+eeg_directory = r"E:\Code snippets\IntraOp Data"
 
 # Initialize an empty dictionary to store EEG data
 eeg_data_dict_injured = {}
@@ -84,6 +85,18 @@ for foldername, subfolders, filenames in os.walk(eeg_directory):
 # Create a new dictionary to store the combined data
 combined_dict = {'healthy': list(eeg_data_dict_healthy.values()), 'injured': list(eeg_data_dict_injured.values())}
 
+#["healthy",total_healthy_subjects, healthy_channels_per_subject]
+
+# Example function to extract channels from raw data
+def extract_channels(raw_object):
+    channels = []
+    for channel_idx in range(raw_object.info['nchan']):
+        channel_data = raw_object.get_data(picks=channel_idx)
+        channels.append(channel_data)
+    return channels
+
+
+# Assuming you have the combined_dict as described in the previous example
 
 # Example function to extract channels from raw data
 def extract_channels(raw_object):
@@ -96,13 +109,29 @@ def extract_channels(raw_object):
 # Create a new dictionary to store the simplified data
 simplified_dict = {'healthy': [], 'injured': []}
 
+# Dictionary to keep track of subjects and their indices in simplified_dict
+subject_indices = {'healthy': {}, 'injured': {}}
+
 # Iterate through the combined_dict and extract channels
 for condition, raw_objects in combined_dict.items():
     for raw_object in raw_objects:
-        channels = extract_channels(raw_object)
-        simplified_dict[condition].extend(channels)
+        # Extract subject information from the raw_object string representation
+        subject_info_start = raw_object.__str__().find('sub-')
+        subject_info_end = raw_object.__str__().find('_ses-')
+        subject_key = raw_object.__str__()[subject_info_start:subject_info_end]
 
-# The result is a simplified dictionary that has 2 keys "healthy" and "injured" and all channels as an array (unidentified in terms of both subject and channel) of each type under the correct key
+        # Check if the subject already exists in the simplified_dict
+        if subject_key not in subject_indices[condition]:
+            subject_indices[condition][subject_key] = len(simplified_dict[condition])
+            simplified_dict[condition].append([])
+
+        # Extract channels and add them to the corresponding subject's entry
+        channels = extract_channels(raw_object)
+        simplified_dict[condition][subject_indices[condition][subject_key]].extend(channels)
+
+# Print the resulting simplified dictionary
+print(simplified_dict)
+
 
 
 
