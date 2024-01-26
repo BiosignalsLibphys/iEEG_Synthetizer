@@ -12,3 +12,8 @@ This technology stands as a testament to our dedication to advancing medical res
 simultaneously safeguarding patient confidentiality and data integrity. Through the iEEG_Synthetizer, we aim to provide 
 researchers and clinicians with robust, authentic datasets that can be used to drive innovations in epilepsy treatment 
 and care, without compromising on the ethical aspects of data usage.
+
+This is an ongoing project. We have not added the tools for the model, which is why it's labeled 'Model_TrainTest_Example.py'. Therefore, the following lines of code are not operational:
+
+from extract_eeg_data_tools.tools import *
+from extract_eeg_data_tools.TimeGan_functions import *"
