@@ -3,6 +3,7 @@
 Created on Fri Jan 19 15:24:19 2024
 
 @author: User
+
 """
 
 import mne
@@ -84,9 +85,6 @@ for foldername, subfolders, filenames in os.walk(eeg_directory):
                 
 # Create a new dictionary to store the combined data
 combined_dict = {'healthy': list(eeg_data_dict_healthy.values()), 'injured': list(eeg_data_dict_injured.values())}
-
-
-
 
 # Assuming you have the combined_dict as described in the previous example
 
