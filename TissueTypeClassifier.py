@@ -57,6 +57,7 @@ simplified_dict = [] #space saver
 
 # Function to calculate relative power of a frequency band
 def relative_power(signal, frequency_band, sampling_frequency):
+
     fft_result = np.fft.fft(signal)
     frequencies = np.fft.fftfreq(len(signal), 1 / sampling_frequency)
     
@@ -71,11 +72,12 @@ def relative_power(signal, frequency_band, sampling_frequency):
     
     # Calculate relative power
     relative_power = band_power / total_power
-    
+
     return relative_power
 
 # Function to calculate absolute power of a frequency band
 def absolute_power(signal, frequency_band, sampling_frequency):
+
     fft_result = np.fft.fft(signal)
     frequencies = np.fft.fftfreq(len(signal), 1 / sampling_frequency)
     
@@ -84,7 +86,7 @@ def absolute_power(signal, frequency_band, sampling_frequency):
     
     # Calculate the power within the frequency band
     band_power = np.sum(np.abs(fft_result[band_indices])**2)
-    
+
     return band_power
 
 # Calculate features for each segment and organize them into X and Y vectors
@@ -143,7 +145,7 @@ import tensorflow as tf
 from tensorflow.keras import layers, models, callbacks
 
 # Define the EarlyStopping and ModelCheckpoint callbacks
-early_stopping = callbacks.EarlyStopping(monitor='val_accuracy', patience=5, restore_best_weights=True)
+early_stopping = callbacks.EarlyStopping(monitor='val_accuracy', patience=10, restore_best_weights=True)
 model_checkpoint = callbacks.ModelCheckpoint('best_model.h5', monitor='val_accuracy', save_best_only=True)
 
 
@@ -178,6 +180,7 @@ model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy']
 X_train_reshaped = X_train.reshape((X_train.shape[0], X_train.shape[1], 1))
 X_test_reshaped = X_test.reshape((X_test.shape[0], X_test.shape[1], 1))
 
+
 # Train the model with callbacks
 model.fit(X_train_reshaped, Y_train, epochs=100, batch_size=16, validation_data=(X_test_reshaped, Y_test),
           callbacks=[early_stopping, model_checkpoint])
@@ -191,6 +194,23 @@ print(f'Test Accuracy: {test_accuracy * 100:.2f}%')
 model.save('cnn_model_example.h5')
 
 print("Model has been saved.")
+
+import shap # Reminder shap uses pytorch to do its thing, so if we can't use pytorch in the platform...
+
+# Load the best model
+best_model = models.load_model('best_model.h5')
+# Use SHAP to explain the model predictions
+explainer = shap.DeepExplainer(best_model, X_test_reshaped)
+
+from shap import Explainer
+shap_values = explainer.shap_values(X_test_reshaped)#[0:300])#new_array)#X_train_reshaped)
+
+# Visualize Shapley values
+feature_names = ['rel_delta', 'abs_delta','rel_theta', 'abs_theta' ,'rel_alpha', 'abs_alpha' ,'rel_beta', 'abs_beta' ,'rel_gamma', 'abs_gamma' ,'rel_ripple', 'abs_ripple' ,'rel_fastripple', 'abs_fastripple']
+shap_values_squeezed = np.squeeze(shap_values[0])
+X_test_reshaped_squeezed = np.squeeze(X_test_reshaped)
+shap.summary_plot(shap_values_squeezed, X_test_reshaped_squeezed, feature_names=feature_names)
+
 
 """
 #load and single sample test
