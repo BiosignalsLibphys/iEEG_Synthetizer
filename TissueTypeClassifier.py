@@ -11,7 +11,7 @@ from ReadSort import structure_data
 import numpy as np
 
 
-simplified_dict = structure_data()
+simplified_dict = structure_data('classifier')
 
 
 # Function to divide a signal into segments
@@ -54,7 +54,7 @@ for condition, subjects in simplified_dict.items():
 
 simplified_dict = [] #space saver
 
-
+"""
 # Function to calculate relative power of a frequency band
 def relative_power(signal, frequency_band, sampling_frequency):
 
@@ -74,6 +74,26 @@ def relative_power(signal, frequency_band, sampling_frequency):
     relative_power = band_power / total_power
 
     return relative_power
+"""
+import numpy as np
+from scipy.signal import welch
+
+def relative_power(signal, frequency_band, sampling_frequency):
+    # Compute the Power Spectral Density of the signal
+    frequencies, psd = welch(signal, fs=sampling_frequency)
+
+    # Find indices where frequencies are within the specified band
+    freq_indices = np.where((frequencies >= frequency_band[0]) & (frequencies <= frequency_band[1]))[0]
+
+    # Calculate the power within the specified frequency band
+    band_power = np.sum(psd[freq_indices])
+
+    # Calculate the total power of the signal
+    total_power = np.sum(psd)
+
+    # Calculate and return the relative power
+    return band_power / total_power if total_power > 0 else 0
+
 
 # Function to calculate absolute power of a frequency band
 def absolute_power(signal, frequency_band, sampling_frequency):
