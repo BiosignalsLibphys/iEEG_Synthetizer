@@ -13,7 +13,4 @@ simultaneously safeguarding patient confidentiality and data integrity. Through 
 researchers and clinicians with robust, authentic datasets that can be used to drive innovations in epilepsy treatment 
 and care, without compromising on the ethical aspects of data usage.
 
-This is an ongoing project. We have not added the tools for the model, which is why it's labeled 'Model_TrainTest_Example.py'. Therefore, the following lines of code are not operational:
-
-from extract_eeg_data_tools.tools import *
-from extract_eeg_data_tools.TimeGan_functions import *"
+This is an ongoing project, and in this repo we share some early demos of what we are currently developing.
