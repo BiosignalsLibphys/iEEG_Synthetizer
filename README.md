@@ -14,3 +14,5 @@ researchers and clinicians with robust, authentic datasets that can be used to d
 and care, without compromising on the ethical aspects of data usage.
 
 This is an ongoing project, and in this repo we share some early demos of what we are currently developing.
+
+![Alt text](image.png "Original versus Synthetic iEEG")
