@@ -13,6 +13,6 @@ simultaneously safeguarding patient confidentiality and data integrity. Through 
 researchers and clinicians with robust, authentic datasets that can be used to drive innovations in epilepsy treatment 
 and care, without compromising on the ethical aspects of data usage.
 
-This is an ongoing project, and in this repo we share some early demos of what we are currently developing.
+This is an ongoing project, and in this repo we share some amazing early demos of what we are currently developing.
 
 ![Alt text](image.png "Original versus Synthetic iEEG")
