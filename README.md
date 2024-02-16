@@ -15,4 +15,5 @@ and care, without compromising on the ethical aspects of data usage.
 
 This is an ongoing project, and in this repo we share some amazing early demos of what we are currently developing.
 
+![Alt text](Demo_Flow.png "Original versus Synthetic iEEG")
 ![Alt text](image.png "Original versus Synthetic iEEG")
