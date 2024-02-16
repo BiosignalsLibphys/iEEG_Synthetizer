@@ -1,16 +1,10 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Mon Feb  5 11:58:29 2024
-
-@author: User
-"""
 import numpy as np
 import json
 from ReadSort import structure_data
 import numpy as np
 
 
-simplified_dict = structure_data('classifier')
+simplified_dict = structure_data('chan_gen')
 
 
 # Function to divide a signal into segments
@@ -26,7 +20,7 @@ def divide_into_segments(signal, segment_length, sampling_frequency):
 
 
 # Define the segment length in seconds
-segment_length = 10#######################
+segment_length = 10
 sampling_frequency = 2048
 
 # Create a new dictionary to store the segmented data
@@ -85,12 +79,12 @@ segmented_dict["healthy"] = [
 normalized_arrays =[]
 for X in range(len(segmented_dict["healthy"])):
     for Y in range(len(segmented_dict["healthy"][X])):
-        for Z in range(int(len(segmented_dict["healthy"][X][Y])/5)):##Reducing the number of files looked at here for testing purposes
+        for Z in range(int(len(segmented_dict["healthy"][X][Y])/50)):##Reducing the number of files looked at here for testing purposes
             # Grab the original array
             original_array = segmented_dict["healthy"][X][Y][Z]
             
             # Add 0.2 to the original array
-            original_array += 0.2
+            original_array += 0.2#min(segmented_dict["healthy"][X][Y][Z])
             
             # Calculate the normalized array
             normalized_array = (original_array - np.min(original_array)) / (np.max(original_array) - np.min(original_array))
@@ -137,7 +131,7 @@ class VAE(tf.keras.Model):
         std = tf.exp(0.5*logvar)
         eps = tf.random.normal(shape=std.shape)
         return mu + eps*std
-       #the addition of temperature to this only makes sen if we are using a softmax activation function
+        #the addition of temperature to this only makes sense if we are using a softmax activation function, which we could use with some adaptation
 
     def decode(self, z):
         # Decode the latent vector z into the output x
@@ -173,7 +167,7 @@ def loss_function(recon_x, x, mu, logvar):
 input_size = UsedSize # number of points in a sine wave
 hidden_size = 200 # size of the hidden layer
 latent_size = UsedSize # size of the latent space
-batch_size = 1#00 # size of the mini-batch, lowering this leads to an increase in performance/overfit, but slows down training dramatically (almost directly proportionally)
+batch_size = 10 # size of the mini-batch, lowering this leads to an increase in performance/overfit, but slows down training dramatically (almost directly proportionally)
 num_epochs = 1250 # number of epochs
 learning_rate = 0.001 # learning rate
 
@@ -199,7 +193,7 @@ loss_history = []
 
 # Define some variables to store the best loss and the patience
 best_loss = float('inf')
-patience = int(num_epochs/1)
+patience = int(num_epochs/10)
 no_improvement = 0
 
 # Train the model
@@ -210,7 +204,7 @@ for epoch in range(num_epochs):
     # Loop over the mini-batches
     for i in range(0, dataset.shape[0], batch_size):
         # Get the current batch
-        batch = dataset[i:i+batch_size] ## if batch_size = dataset.shape[0] this means that every training epoch is with a set of all of the signals inside the dataset
+        batch = dataset[i:i+batch_size] #if batch_size = dataset.shape[0] this means that every training epoch is with a set of all of the signals inside the dataset
         # Compute the gradients
         with tf.GradientTape() as tape:
             recon_batch, mu, logvar = model(batch)
@@ -250,9 +244,9 @@ output, _, _ = model(tf.random.normal(shape=(1, latent_size)))
 output = output.numpy().reshape(-1)
 
 # Plot the original and generated sine waves
-#plt.plot(x, y, label='Original')
 plt.figure(70)
-plt.plot(segmented_dict[0], label='Original')
+indices1_to_plot = int(np.random.choice(len(segmented_dict), size=1, replace=False))
+plt.plot(segmented_dict[indices1_to_plot], label='Original')
 plt.plot(output, label='Generated')
 plt.title('EEG Generation')
 plt.xlabel('x')
@@ -261,7 +255,8 @@ plt.legend()
 plt.show()
 
 plt.figure(80)
-plt.plot(segmented_dict[1], label='Original')
+indices2_to_plot = int(np.random.choice(len(segmented_dict), size=1, replace=False))
+plt.plot(segmented_dict[indices2_to_plot], label='Original')
 plt.plot(output, label='Generated')
 plt.title('EEG Generation')
 plt.xlabel('x')

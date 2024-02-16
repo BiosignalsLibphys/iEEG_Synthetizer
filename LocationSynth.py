@@ -1,10 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Wed Jan 31 14:50:29 2024
-
-@author: User
-"""
-
 import numpy as np
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import LSTM, Dense
@@ -196,7 +189,8 @@ import matplotlib.pyplot as plt
 def calculate_similarity(real_sample, synthetic_samples):
     """
     Calculate the similarity scores between a real sample and a list of synthetic samples.
-
+    This is just a very simple similarity measure used for testing purposes,
+    in the future more and higher complexity metrics will be used here.
     Parameters:
     - real_sample: A single real data sample.
     - synthetic_samples: List of synthetic samples.
@@ -262,8 +256,7 @@ def plot_gan_losses(g_losses):
     plt.legend()
     plt.show()
 
-# Example usage:
-# Assuming you have a list of generator losses across epochs (e.g., g_losses)g_losses = [0.5, 0.4, 0.3, 0.2, 0.1]
+
 plot_gan_losses(val_g_loss_vector)
 
 

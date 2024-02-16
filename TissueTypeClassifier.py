@@ -1,10 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Wed Jan 24 14:51:21 2128
-
-@author: User
-"""
-
 import numpy as np
 import json
 from ReadSort import structure_data
@@ -54,27 +47,7 @@ for condition, subjects in simplified_dict.items():
 
 simplified_dict = [] #space saver
 
-"""
-# Function to calculate relative power of a frequency band
-def relative_power(signal, frequency_band, sampling_frequency):
 
-    fft_result = np.fft.fft(signal)
-    frequencies = np.fft.fftfreq(len(signal), 1 / sampling_frequency)
-    
-    # Find indices corresponding to the frequency band
-    band_indices = np.where((frequencies >= frequency_band[0]) & (frequencies <= frequency_band[1]))[0]
-    
-    # Calculate the power within the frequency band
-    band_power = np.sum(np.abs(fft_result[band_indices])**2)
-    
-    # Calculate the total power
-    total_power = np.sum(np.abs(fft_result)**2)
-    
-    # Calculate relative power
-    relative_power = band_power / total_power
-
-    return relative_power
-"""
 import numpy as np
 from scipy.signal import welch
 
@@ -202,7 +175,7 @@ X_test_reshaped = X_test.reshape((X_test.shape[0], X_test.shape[1], 1))
 
 
 # Train the model with callbacks
-model.fit(X_train_reshaped, Y_train, epochs=100, batch_size=16, validation_data=(X_test_reshaped, Y_test),
+model.fit(X_train_reshaped, Y_train, epochs=100, batch_size=8, validation_data=(X_test_reshaped, Y_test),
           callbacks=[early_stopping, model_checkpoint])
 
 # Evaluate the model on the test set

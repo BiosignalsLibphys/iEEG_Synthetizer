@@ -1,10 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Fri Jan 19 15:24:19 2024
-
-@author: User
-"""
-
 import mne
 import os
 import pandas as pd
@@ -13,7 +6,7 @@ import numpy as np
 def structure_data(model_type): #change this to take arguments of type (classifier, location generator, data generator, etc)
     # Directory containing your EEG files
     eeg_directory = r"E:\Code snippets\IntraOp Data"
-    if model_type == 'classifier':
+    if model_type == 'classifier' or model_type == 'chan_gen':
         eeg_directory = r"E:\Code snippets\IntraOp Data"
         # Initialize an empty dictionary to store EEG data
         eeg_data_dict_injured = {}
