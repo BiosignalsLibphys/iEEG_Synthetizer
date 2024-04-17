@@ -186,7 +186,7 @@ def structure_data(model_type): #change this to take arguments of type (classifi
             new_dict[i] = value # Add 1 to the index to start from 1
         return new_dict#binary_channel_dict
     
-    elif model_type == "hitorie":
+    elif model_type == "breakdown":
         eeg_directory = r"E:\Code snippets\IntraOp Data"
         # Initialize an empty dictionary to store EEG data
         eeg_data_dict_injured = {}
