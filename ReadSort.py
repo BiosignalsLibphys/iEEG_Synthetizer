@@ -313,8 +313,14 @@ def structure_data(model_type, eeg_directory=r"E:\Code snippets\IntraOp Data"): 
                         for _, row in channels_info.iterrows():
                             channel_name = row['name']
                             resected = row['resected']
-                            cavity = 'nan' if pd.isna(row['cavity']) else row['cavity']
-                            edge = 'nan' if pd.isna(row['edge']) else row['edge']
+                            # Check if 'cavity' column exists, if not, set to 'nan'
+                            cavity = 'nan' if 'cavity' not in row.index else ('nan' if pd.isna(row['cavity']) else row['cavity'])
+                            
+                            # Check if 'edge' column exists, if not, set to 'nan'
+                            edge = 'nan' if 'edge' not in row.index else ('nan' if pd.isna(row['edge']) else row['edge'])
+                            
+                            #cavity = 'nan' if pd.isna(row['cavity']) else row['cavity']
+                            #edge = 'nan' if pd.isna(row['edge']) else row['edge']
                             
                             condition_key = (cavity, edge, situation_id)
                             print("\n\n\n")
